@@ -1,0 +1,77 @@
+﻿@{
+
+    ViewBag.Title = "Index";
+
+}
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+
+<script type="text/javascript">
+    //Implementing Json to List PRODUCTS
+    var uri = 'api/products';
+
+    $(document).ready(function getProducts() {
+        $.getJSON(uri,
+            function (data) {
+                $('#products').empty(); // Clear the table body.
+
+                // Loop through the list of products.
+                $.each(data, function (key, val) {
+                    // Adding a table row for the product.
+                    var row = '<td>' + val.ID + '</td><td>' + val.Name + '</td><td>' + val.Category + '</td>';
+                    $('<tr/>', { html: row }).appendTo($('#products')); // Append the name.
+
+                });
+            });
+    });
+
+    //Implementing method to display searched ID
+
+    function formatItem(item) {
+        return 'ID: ' + item.ID + ' Name : ' + item.Name + 'Category : ' + item.Category;
+
+    }
+
+    //Implemet method to search by ID
+    function find() {
+        var id = $('#prodId').val();
+        $.getJSON(uri + '/' + id)
+            .done(function (data) {
+                $('#product').text(formatItem(data));
+            })
+            .fail(function (jqXHR, textStatus, err) {
+                $('#product').text('Error WRONG ID: Product was '+ err);
+            });
+    }
+</script>
+
+
+<div class="jumbotron">
+    <h2>Hi I am JIMMY - Test Skill for Digital8 </h2>
+    <h3>This is my UI. I developed it in Visual Studio C# - ASP.NET</h3>
+    <div class="text-primary">
+        <h2>Products</h2>
+        <table class="table table-striped ">
+            <thead>
+                <tr><th>ID</th><th>Name</th><th>Category</th></tr>
+            </thead>
+            <tbody id="products"></tbody>
+        </table>
+    </div>
+
+
+    <div class="text-success">
+        <h2>Search Product by ID</h2>
+        <input type="text" id="prodId" size="5" />
+        <input type="button" value="Search" onclick="find();" />
+        <p id="product" />
+
+
+    </div>
+
+</div>
+
+
+
+
